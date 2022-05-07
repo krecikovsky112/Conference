@@ -31,9 +31,4 @@ public class UsersController {
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
     }
 
-    @GetMapping("/sample")
-    public String show() {
-        return "sample";
-    }
-
 }

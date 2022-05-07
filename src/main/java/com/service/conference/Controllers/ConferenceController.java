@@ -1,10 +1,19 @@
 package com.service.conference.Controllers;
 
+import com.service.conference.Models.Lecture;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ConferenceController {
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @GetMapping("/showConferencePlan")
     public String showConferencePlan() {
@@ -16,5 +25,12 @@ public class ConferenceController {
                 "- the third one starts at 2 p.m. and ends at 3:45 p.m.<br>"+
                 "As part of the conference, 3 different thematic paths run in parallel are supported<br>" +
                 "Each lecture can accommodate a maximum of 5 listeners";
+    }
+
+    @GetMapping("reservationPlans/{login}")
+    public List<Lecture> counterSpecialCharacters(@PathVariable String login) {
+        String sql = "SELECT l.name,l.time FROM lectures as l, users as u WHERE u.name = '" + login +
+                "' AND (u.reservation1 = l.id OR u.reservation2 = l.id OR u.reservation3 = l.id)";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Lecture.class));
     }
 }

@@ -20,14 +20,9 @@ public class UsersController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-//    @GetMapping("/users")
-//    public List<User> listAll() {
-//        return repo.findAll();
-//    }
-
     @GetMapping("/users")
     public List<User> listAll() {
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT id,name,email FROM users";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
     }
 

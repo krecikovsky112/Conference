@@ -1,7 +1,6 @@
 package com.service.conference.Controllers;
 
 import com.service.conference.Models.Lecture;
-import com.service.conference.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

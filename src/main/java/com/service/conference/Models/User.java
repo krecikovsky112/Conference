@@ -1,4 +1,4 @@
-package com.service.conference;
+package com.service.conference.Models;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;

@@ -1,17 +1,14 @@
-package com.service.conference;
+package com.service.conference.Controllers;
 
 import java.util.List;
 
+import com.service.conference.Models.User;
+import com.service.conference.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UsersController {
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
     @Autowired
     private UserRepository userRepository;
@@ -28,9 +25,14 @@ public class UsersController {
     }
 
     @PutMapping("/updateEmail")
-   private User updateEmail(@RequestBody User user){
+    private User updateEmail(@RequestBody User user) {
         userRepository.save(user);
         return user;
     }
 
+    @PutMapping("/cancelReservation")
+    private User cancelReservation(@RequestBody User user) {
+        userRepository.save(user);
+        return user;
+    }
 }

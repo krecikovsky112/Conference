@@ -49,10 +49,37 @@ public class UsersController {
                 reservation3 += userRepository.countByReservation3(i);
             }
         }
-        all += reservation1 + reservation2+reservation3;
+        all += reservation1 + reservation2 + reservation3;
 
-        return "Lecture 1: " +  (reservation1/all* 100) + " % \n" +
-                "Lecture 2: " +  (reservation2/all* 100)  + " % \n"+
-                "Lecture 3: " +  (reservation3/all* 100)+ " % \n" ;
+        return "Lecture 1: " + (reservation1 / all * 100) + " % \n" +
+                "Lecture 2: " + (reservation2 / all * 100) + " % \n" +
+                "Lecture 3: " + (reservation3 / all * 100) + " % \n";
+    }
+
+    @GetMapping("/listOfThemas")
+    public String showListThemas() {
+        double thema1 = 0, thema2 = 0, thema3 = 0, all = 0;
+        for (int i = 1; i < 10; i++) {
+            if (i == 1 || i == 4 || i == 7) {
+                thema1 += getCounterThema(i);
+            } else if (i == 2 || i == 5 || i == 8) {
+                thema2 += getCounterThema(i);
+            } else {
+                thema3 += getCounterThema(i);
+            }
+        }
+        all = thema1 + thema2 + thema3;
+
+        return "Thema 1: " + (thema1 / all * 100) + " % \n" +
+                "Thema 2: " + (thema2 / all * 100) + " % \n" +
+                "Thema 3: " + (thema3 / all * 100) + " % \n";
+    }
+
+    private double getCounterThema(int i) {
+        double thema = 0 ;
+        thema += userRepository.countByReservation1(i);
+        thema += userRepository.countByReservation2(i);
+        thema += userRepository.countByReservation3(i);
+        return thema;
     }
 }

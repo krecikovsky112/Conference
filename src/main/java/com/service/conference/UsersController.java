@@ -5,25 +5,32 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UsersController {
 
-//    private final UserRepository repo;
-//
-//    public UsersController(UserRepository repo) {
-//        this.repo = repo;
-//    }
-
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/users")
     public List<User> listAll() {
-        String sql = "SELECT id,name,email FROM users";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(User.class));
+        return (List<User>) userRepository.findAll();
+    }
+
+    @PostMapping("/addUser")
+    private int saveUser(@RequestBody User user){
+        userRepository.save(user);
+        return user.getId();
+    }
+
+    @PutMapping("/updateEmail")
+   private User updateEmail(@RequestBody User user){
+        userRepository.save(user);
+        return user;
     }
 
 }

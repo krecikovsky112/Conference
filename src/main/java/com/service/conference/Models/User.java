@@ -1,7 +1,6 @@
 package com.service.conference.Models;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name = "users")

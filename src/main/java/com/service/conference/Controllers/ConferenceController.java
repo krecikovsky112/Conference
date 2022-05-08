@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.GeneratedValue;
 import java.util.List;
 
 @RestController
@@ -31,5 +32,7 @@ public class ConferenceController {
                 "' AND (u.reservation1 = l.id OR u.reservation2 = l.id OR u.reservation3 = l.id)";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Lecture.class));
     }
+
+
 
 }

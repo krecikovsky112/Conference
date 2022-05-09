@@ -24,14 +24,20 @@ public class UsersController {
     @PostMapping("/addReservation")
     private String addReservation(@RequestBody User user) throws IOException {
 
-        if (userRepository.findByName(user.getName()).size() == 0) {
-            userRepository.save(user);
+        if (userRepository.countByReservation1(user.getReservation1()) < 5 &&
+                userRepository.countByReservation2(user.getReservation2()) < 5 &&
+                userRepository.countByReservation3(user.getReservation3()) < 5) {
+            if (userRepository.findByName(user.getName()).size() == 0) {
+                userRepository.save(user);
 
-            saveToFile(user);
+                saveToFile(user);
 
-            return "Succesfull reservation!";
+                return "Succesfull reservation!";
+            } else {
+                return "Given login is busy!";
+            }
         } else {
-            return "Given login is busy!";
+            return "Cannot reservation on this lecture with this themas!";
         }
     }
 
@@ -98,7 +104,7 @@ public class UsersController {
         String filePath = "./notifications.txt";
         FileWriter fileWriter = null;
         fileWriter = new FileWriter(filePath);
-        fileWriter.append("Data: " + java.time.LocalDate.now().toString() +"\n");
+        fileWriter.append("Data: " + java.time.LocalDate.now().toString() + "\n");
         fileWriter.append("To whom: " + user.getName() + "\n");
         fileWriter.append("Reservation 10:00 - 11:45: " + user.getReservation1() + "\n" +
                 "Reservation 12:00 - 13-45: " + user.getReservation2() + "\n" +

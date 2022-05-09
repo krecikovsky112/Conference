@@ -102,8 +102,8 @@ public class UsersController {
 
     private void saveToFile(User user) throws IOException {
         String filePath = "./notifications.txt";
-        FileWriter fileWriter = null;
-        fileWriter = new FileWriter(filePath);
+        FileWriter fileWriter = new FileWriter(filePath,true);
+
         fileWriter.append("Data: " + java.time.LocalDate.now().toString() + "\n");
         fileWriter.append("To whom: " + user.getName() + "\n");
         fileWriter.append("Reservation 10:00 - 11:45: " + user.getReservation1() + "\n" +

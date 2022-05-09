@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.service.conference.Models.Reservation;
-import com.service.conference.Repository.UserRepository;
+import com.service.conference.Repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
 
     @Autowired
-    private UserRepository userRepository;
+    private ReservationRepository reservationRepository;
 
     @PostMapping("/addReservation")
     private String addReservation(@RequestBody Reservation reservation) throws IOException {
 
-        if (userRepository.countByReservation1(reservation.getReservation1()) < 5 &&
-                userRepository.countByReservation2(reservation.getReservation2()) < 5 &&
-                userRepository.countByReservation3(reservation.getReservation3()) < 5 &&
+        if (reservationRepository.countByReservation1(reservation.getReservation1()) < 5 &&
+                reservationRepository.countByReservation2(reservation.getReservation2()) < 5 &&
+                reservationRepository.countByReservation3(reservation.getReservation3()) < 5 &&
                 (reservation.getReservation1() + 3) != reservation.getReservation2() &&
                 (reservation.getReservation1() + 6) != reservation.getReservation3() &&
                 (reservation.getReservation2() + 3) != reservation.getReservation3()) {
-            if (userRepository.findByName(reservation.getName()).size() == 0) {
-                userRepository.save(reservation);
+            if (reservationRepository.findByName(reservation.getName()).size() == 0) {
+                reservationRepository.save(reservation);
 
                 saveToFile(reservation);
 
@@ -38,15 +38,19 @@ public class ReservationController {
         }
     }
 
-    @PutMapping("/updateEmail")
-    private Reservation updateEmail(@RequestBody Reservation reservation) {
-        userRepository.save(reservation);
-        return reservation;
+    @PutMapping("/updateEmail/{name}/{newEmail}")
+    private String updateEmail(@PathVariable String name, @PathVariable String newEmail) {
+//        reservationRepository.save(reservation);
+
+        List<Reservation> reservations = reservationRepository.findByName(name);
+        reservationRepository.updateEmail(newEmail, reservations.get(0).getId());
+
+        return "Change email to: " + newEmail;
     }
 
     @PutMapping("/cancelReservation")
     private Reservation cancelReservation(@RequestBody Reservation reservation) {
-        userRepository.save(reservation);
+        reservationRepository.save(reservation);
         return reservation;
     }
 

@@ -3,7 +3,7 @@ package com.service.conference.Models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "reservations")
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

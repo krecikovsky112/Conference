@@ -2,13 +2,12 @@ package com.service.conference.Controllers;
 
 import com.service.conference.Models.Lecture;
 import com.service.conference.Models.Reservation;
-import com.service.conference.Repository.UserRepository;
+import com.service.conference.Repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
 @RestController
@@ -17,7 +16,7 @@ public class ConferenceController {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private UserRepository userRepository;
+    private ReservationRepository reservationRepository;
 
     @GetMapping("/showConferencePlan")
     public String showConferencePlan() {
@@ -33,14 +32,14 @@ public class ConferenceController {
 
     @GetMapping("reservationPlans/{login}")
     public List<Lecture> counterSpecialCharacters(@PathVariable String login) {
-        String sql = "SELECT l.name,l.time FROM lectures as l, users as u WHERE u.name = '" + login +
-                "' AND (u.reservation1 = l.id OR u.reservation2 = l.id OR u.reservation3 = l.id)";
+        String sql = "SELECT l.name,l.time FROM lectures as l, reservations as r WHERE r.name = '" + login +
+                "' AND (r.reservation1 = l.id OR r.reservation2 = l.id OR r.reservation3 = l.id)";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Lecture.class));
     }
 
     @GetMapping("/users")
     public String printAllUsers() {
-        List<Reservation> reservations =  (List<Reservation>) userRepository.findAll();
+        List<Reservation> reservations =  (List<Reservation>) reservationRepository.findAll();
 
         StringBuilder result = new StringBuilder();
         for(Reservation reservation : reservations){
@@ -56,11 +55,11 @@ public class ConferenceController {
         double reservation1 = 0, reservation2 = 0, reservation3 = 0, all = 0;
         for (int i = 1; i < 10; i++) {
             if (i <= 3) {
-                reservation1 += userRepository.countByReservation1(i);
+                reservation1 += reservationRepository.countByReservation1(i);
             } else if (i <= 6) {
-                reservation2 += userRepository.countByReservation2(i);
+                reservation2 += reservationRepository.countByReservation2(i);
             } else {
-                reservation3 += userRepository.countByReservation3(i);
+                reservation3 += reservationRepository.countByReservation3(i);
             }
         }
         all += reservation1 + reservation2 + reservation3;
@@ -91,9 +90,9 @@ public class ConferenceController {
 
     private double getCounterThema(int i) {
         double thema = 0;
-        thema += userRepository.countByReservation1(i);
-        thema += userRepository.countByReservation2(i);
-        thema += userRepository.countByReservation3(i);
+        thema += reservationRepository.countByReservation1(i);
+        thema += reservationRepository.countByReservation2(i);
+        thema += reservationRepository.countByReservation3(i);
         return thema;
     }
 }

@@ -43,15 +43,37 @@ public class ReservationController {
 //        reservationRepository.save(reservation);
 
         List<Reservation> reservations = reservationRepository.findByName(name);
-        reservationRepository.updateEmail(newEmail, reservations.get(0).getId());
+        int res = reservationRepository.updateEmail(newEmail, reservations.get(0).getId());
 
-        return "Change email to: " + newEmail;
+        if (res == 1) {
+            return "Change email to: " + newEmail;
+        } else {
+            return "Error changing email!";
+        }
     }
 
-    @PutMapping("/cancelReservation")
-    private Reservation cancelReservation(@RequestBody Reservation reservation) {
-        reservationRepository.save(reservation);
-        return reservation;
+    @PutMapping("/cancelReservation/{name}/{numberOfReservation}")
+    private String cancelReservation(@PathVariable String name,@PathVariable int numberOfReservation) {
+
+        List<Reservation> reservations = reservationRepository.findByName(name);
+
+        switch (numberOfReservation){
+            case 1:
+                reservations.get(0).setReservation1(0);
+                break;
+            case 2:
+                reservations.get(0).setReservation2(0);
+                break;
+            case 3:
+                reservations.get(0).setReservation3(0);
+                break;
+            default:
+                break;
+        }
+
+        reservationRepository.save(reservations.get(0));
+
+        return "Cancel reservation number: " + numberOfReservation;
     }
 
 

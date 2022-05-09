@@ -1,5 +1,7 @@
 package com.service.conference.Controllers;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import com.service.conference.Models.Lecture;
@@ -20,10 +22,19 @@ public class UsersController {
     }
 
     @PostMapping("/addReservation")
-    private int addReservation(@RequestBody User user) {
-        userRepository.save(user);
-        return user.getId();
+    private String addReservation(@RequestBody User user) throws IOException {
+
+        if (userRepository.findByName(user.getName()).size() == 0) {
+            userRepository.save(user);
+
+            saveToFile(user);
+
+            return "Succesfull reservation!";
+        } else {
+            return "Given login is busy!";
+        }
     }
+
 
     @PutMapping("/updateEmail")
     private User updateEmail(@RequestBody User user) {
@@ -76,10 +87,23 @@ public class UsersController {
     }
 
     private double getCounterThema(int i) {
-        double thema = 0 ;
+        double thema = 0;
         thema += userRepository.countByReservation1(i);
         thema += userRepository.countByReservation2(i);
         thema += userRepository.countByReservation3(i);
         return thema;
+    }
+
+    private void saveToFile(User user) throws IOException {
+        String filePath = "./notifications.txt";
+        FileWriter fileWriter = null;
+        fileWriter = new FileWriter(filePath);
+        fileWriter.append("Data: " + java.time.LocalDate.now().toString() +"\n");
+        fileWriter.append("To whom: " + user.getName() + "\n");
+        fileWriter.append("Reservation 10:00 - 11:45: " + user.getReservation1() + "\n" +
+                "Reservation 12:00 - 13-45: " + user.getReservation2() + "\n" +
+                "Reservation 14:00 - 15:45: " + user.getReservation3() + "\n");
+
+        fileWriter.close();
     }
 }

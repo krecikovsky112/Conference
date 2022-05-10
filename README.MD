@@ -1,12 +1,12 @@
 # IT Conference Service
-###Software and technologies
+### Software and technologies
 -Postman<br>
 -H2 database<br>
 -IntelliJ IDEA or another IDE<br>
 -Spring boot<br>
 -Java 11
-###Setup
-####H2 Database setup
+### Setup
+#### H2 Database setup
 To run this project, install H2 database and run server:<br>
 ````
 ~H2\bin> java -cp h2-version.jar org.h2.tools.Server -webPort 8083
@@ -30,14 +30,14 @@ INSERT INTO Lectures VALUES(7, 'Thema1','14:00');
 INSERT INTO Lectures VALUES(8, 'Thema2','14:00');
 INSERT INTO Lectures VALUES(9, 'Thema3','14:00');
 ````
-####IDE Setup
+#### IDE Setup
 Run project from Github in IntelliJ or another IDE and set appopriate properties for h2 database
 ````
 spring.datasource.url=jdbc:h2:tcp://localhost/~/test
 spring.datasource.username=sa
 spring.datasource.password=
 ````
-###Syntax
+### Syntax
 Show plan conference:
 ````
 GET
@@ -86,7 +86,7 @@ Show stats themas:
 GET
 http://localhost:8081/listOfThemas
 ````
-###Example
+### Example
 Request:
 ````
 GET

@@ -40,7 +40,6 @@ public class ReservationController {
 
     @PutMapping("/updateEmail/{name}/{newEmail}")
     private String updateEmail(@PathVariable String name, @PathVariable String newEmail) {
-//        reservationRepository.save(reservation);
 
         List<Reservation> reservations = reservationRepository.findByName(name);
         int res = reservationRepository.updateEmail(newEmail, reservations.get(0).getId());
